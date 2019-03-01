@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -23,10 +25,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ResultActivity extends AppCompatActivity {
+    private static final String FILE_NAME = "ejemplo.txt";
 
     TextView posttCantidad, posttPrecio, posttSubtotal;
     TextView postiCantidad, postiPrecio, postiSubtotal;
@@ -41,7 +45,7 @@ public class ResultActivity extends AppCompatActivity {
     TextView xpowerCantidad, xpowerPrecio, xpowerSubtotal;
     TextView sensorCantidad, sensorPrecio, sensorSubtotal;
     TextView total, venta;
-    ImageButton excel;
+    ImageButton excel, txt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,48 +92,24 @@ public class ResultActivity extends AppCompatActivity {
         total = (TextView) findViewById(R.id.total);
         //venta = (TextView) findViewById(R.id.);
         excel = (ImageButton) findViewById(R.id.excel);
+        txt = (ImageButton) findViewById(R.id.txt);
         //endregion
 
         // region Send results
         // Recive data from MainActivity and set data
         posttCantidad.setText(String.valueOf(getIntent().getDoubleExtra("POSTT_CANTIDAD",0)));
-        //posttPrecio.setText(String.valueOf(getIntent().getDoubleExtra("POSTT_PRECIO",0)));
-        //posttSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("POSTT_SUBTOTAL",0)));
         postiCantidad.setText(String.valueOf(getIntent().getDoubleExtra("POSTI_CANTIDAD",0)));
-        //postiPrecio.setText(String.valueOf(getIntent().getDoubleExtra("POSTI_PRECIO",0)));
-        //postiSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("POSTI_SUBTOTAL",0)));
         aisltCantidad.setText(String.valueOf(getIntent().getDoubleExtra("AISLTEMP_CANTIDAD",0)));
-        //aisltPrecio.setText(String.valueOf(getIntent().getDoubleExtra("AISLTEMP_PRECIO",0)));
-        //aisltSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("AISLTEMP_SUBTOTAL",0)));
         aisliCantidad.setText(String.valueOf(getIntent().getDoubleExtra("AISLINT_CANTIDAD",0)));
-        //aisliPrecio.setText(String.valueOf(getIntent().getDoubleExtra("AISLINT_PRECIO",0)));
-        //aisliSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("AISLINT_SUBTOTAL",0)));
         abrazaderaCantidad.setText(String.valueOf(getIntent().getDoubleExtra("ABRAZADERA_CANTIDAD",0)));
-        //abrazaderaPrecio.setText(String.valueOf(getIntent().getDoubleExtra("ABRAZADERA_PRECIO",0)));
-        //abrazaderaSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("ABRAZADERA_SUBTOTAL",0)));
         alambreacCantidad.setText(String.valueOf(getIntent().getDoubleExtra("ALAMBREACERADO_CANTIDAD",0)));
-        //alambreacPrecio.setText(String.valueOf(getIntent().getDoubleExtra("ALAMBREACERADO_PRECIO",0)));
-        //alambreacSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("ALAMBREACERADO_SUBTOTAL",0)));
         alambregalCantidad.setText(String.valueOf(getIntent().getDoubleExtra("ALAMBREGALVANIZADO_CANTIDAD",0)));
-        //alamabregalPrecio.setText(String.valueOf(getIntent().getDoubleExtra("ALAMBREGALVANIZADO_PRECIO",0)));
-        //alambregalSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("ALAMBREGALVANIZADO_SUBTOTAL",0)));
         cableCantidad.setText(String.valueOf(getIntent().getDoubleExtra("CABLEBUJIA_CANTIDAD",0)));
-        //cablePrecio.setText(String.valueOf(getIntent().getDoubleExtra("CABLEBUJIA_PRECIO",0)));
-        //cableSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("CABLEBUJIA_SUBTOTAL",0)));
         letreroCantidad.setText(String.valueOf(getIntent().getDoubleExtra("LETRERO_CANTIDAD",0)));
-        //letreroPrecio.setText(String.valueOf(getIntent().getDoubleExtra("LETRERO_PRECIO",0)));
-        //letreroSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("LETRERO_SUBTOTAL",0)));
         aroCantidad.setText(String.valueOf(getIntent().getDoubleExtra("ARODOBLE_CANTIDAD",0)));
-        //aroPrecio.setText(String.valueOf(getIntent().getDoubleExtra("ARODOBLE_PRECIO",0)));
-        //aroSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("ARODOBLE_SUBTOTAL",0)));
         xpowerCantidad.setText(String.valueOf(getIntent().getDoubleExtra("XPOWERi8_CANTIDAD",0)));
-        //xpowerPrecio.setText(String.valueOf(getIntent().getDoubleExtra("XPOWERi8_PRECIO",0)));
-        //xpowerSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("XPOWERi8_SUBTOTAL",0)));
         sensorCantidad.setText(String.valueOf(getIntent().getDoubleExtra("SENSOR_CANTIDAD",0)));
-        //sensorPrecio.setText(String.valueOf(getIntent().getDoubleExtra("SENSOR_PRECIO",0)));
-        //sensorSubtotal.setText(String.valueOf(getIntent().getDoubleExtra("SENSOR_SUBTOTAL",0)));
         total.setText(String.valueOf(getIntent().getDoubleExtra("TOTAL",0)));
-        //venta.setText(String.valueOf(getIntent().getDoubleExtra("VENTA",0)));
         // endregion
 
         excel.setOnClickListener(new View.OnClickListener() {
@@ -138,8 +118,16 @@ public class ResultActivity extends AppCompatActivity {
                 saveExcel(this, "/sdcard/myExcel.xls");
             }
         });
+
+        txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveTxt();
+            }
+        });
     }
 
+    // region Button EXCEL
     private boolean saveExcel(View.OnClickListener context, String fileName){
         if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
             //  Log.w("FileUtils", "Storage not available or read only");
@@ -214,5 +202,52 @@ public class ResultActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+    // endregion
+
+    public void saveTxt(){
+        String text = "Tipo\t\tCantidad"
+                + "\nPost T\t\t" + String.valueOf(getIntent().getDoubleExtra("POSTT_CANTIDAD",0))
+                + "\nPost I\t\t" + String.valueOf(getIntent().getDoubleExtra("POSTI_CANTIDAD",0))
+                + "\nAisl Temp\t" + String.valueOf(getIntent().getDoubleExtra("AISLTEMP_CANTIDAD",0))
+                + "\nAisl Int\t" + String.valueOf(getIntent().getDoubleExtra("AISLINT_CANTIDAD",0))
+                + "\nAbrazadera\t" + String.valueOf(getIntent().getDoubleExtra("ABRAZADERA_CANTIDAD",0))
+                + "\nAlambre Ace.\t" + String.valueOf(getIntent().getDoubleExtra("ALAMBREACERADO_CANTIDAD",0))
+                + "\nAlambre Gal.\t" + String.valueOf(getIntent().getDoubleExtra("ALAMBREGALVANIZADO_CANTIDAD",0))
+                + "\nCable Bujía\t" + String.valueOf(getIntent().getDoubleExtra("CABLEBUJIA_CANTIDAD",0))
+                + "\nLetrero\t\t" + String.valueOf(getIntent().getDoubleExtra("LETRERO_CANTIDAD",0))
+                + "\nArodoble\t" + String.valueOf(getIntent().getDoubleExtra("ARODOBLE_CANTIDAD",0))
+                + "\nXPower i8\t" + String.valueOf(getIntent().getDoubleExtra("XPOWERi8_CANTIDAD",0))
+                + "\nSensor\t\t" + String.valueOf(getIntent().getDoubleExtra("SENSOR_CANTIDAD",0))
+                + "\nCantidad Total\t" + String.valueOf(getIntent().getDoubleExtra("TOTAL",0));
+
+        FileOutputStream fos = null;
+
+        // Create File
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), FILE_NAME);
+
+        // Write File
+        try {
+            //fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
+            fos = new FileOutputStream(file);
+            fos.write(text.getBytes());
+
+            Toast.makeText(this, "Guardado en " + getFilesDir() + "/" + FILE_NAME, Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+            Toast.makeText(this, "Archivo no Encontrado", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error al Guardar", Toast.LENGTH_LONG).show();
+        } finally {
+            if (fos != null){
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 }
