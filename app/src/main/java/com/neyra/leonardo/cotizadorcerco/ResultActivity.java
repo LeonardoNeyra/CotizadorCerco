@@ -1,6 +1,8 @@
 package com.neyra.leonardo.cotizadorcerco;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ResultActivity extends AppCompatActivity {
-    private static final String FILE_NAME = "ejemplo.txt";
+    private static final String FILE_NAME = "CotizadorCerco.txt";
 
     TextView posttCantidad, posttPrecio, posttSubtotal;
     TextView postiCantidad, postiPrecio, postiSubtotal;
@@ -45,7 +47,7 @@ public class ResultActivity extends AppCompatActivity {
     TextView xpowerCantidad, xpowerPrecio, xpowerSubtotal;
     TextView sensorCantidad, sensorPrecio, sensorSubtotal;
     TextView total, venta;
-    ImageButton excel, txt;
+    ImageButton excel, txt, share;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,45 +56,21 @@ public class ResultActivity extends AppCompatActivity {
 
         // region Read elements
         posttCantidad = (TextView) findViewById(R.id.posttCantidad);
-        //posttPrecio = (TextView) findViewById(R.id.posttPrecio);
-        //posttSubtotal = (TextView) findViewById(R.id.posttSubtotal);
         postiCantidad = (TextView) findViewById(R.id.postiCantidad);
-        //postiPrecio = (TextView) findViewById(R.id.postiPrecio);
-        //postiSubtotal = (TextView) findViewById(R.id.postiSubtotal);
         aisltCantidad = (TextView) findViewById(R.id.aisltemp_Cantidad);
-        //aisltPrecio = (TextView) findViewById(R.id.aisltemp_Precio);
-        //aisltSubtotal = (TextView) findViewById(R.id.aisltemp_Subtotal);
         aisliCantidad = (TextView) findViewById(R.id.aislint_Cantidad);
-        //aisliPrecio = (TextView) findViewById(R.id.aislint_Precio);
-        //aisliSubtotal = (TextView) findViewById(R.id.aislint_Subtotal);
         abrazaderaCantidad = (TextView) findViewById(R.id.abrazadera_Cantidad);
-        //abrazaderaPrecio = (TextView) findViewById(R.id.abrazadera_Precio);
-        //abrazaderaSubtotal = (TextView) findViewById(R.id.abrazadera_Subtotal);
         alambreacCantidad = (TextView) findViewById(R.id.alambreac_Cantidad);
-        //alambreacPrecio = (TextView) findViewById(R.id.alambreac_Precio);
-        //alambreacSubtotal = (TextView) findViewById(R.id.alambreac_Subtotal);
         alambregalCantidad = (TextView) findViewById(R.id.alambregal_Cantidad);
-        //alamabregalPrecio = (TextView) findViewById(R.id.alambregal_Precio);
-        //alambregalSubtotal = (TextView) findViewById(R.id.alambregal_Subtotal);
         cableCantidad = (TextView) findViewById(R.id.cable_Cantidad);
-        //cablePrecio = (TextView) findViewById(R.id.cable_Precio);
-        //cableSubtotal = (TextView) findViewById(R.id.cable_Subtotal);
         letreroCantidad = (TextView) findViewById(R.id.letrero_Cantidad);
-        //letreroPrecio = (TextView) findViewById(R.id.letrero_Precio);
-        //letreroSubtotal = (TextView) findViewById(R.id.letrero_Subtotal);
         aroCantidad = (TextView) findViewById(R.id.aro_Cantidad);
-        //aroPrecio = (TextView) findViewById(R.id.aro_Precio);
-        //aroSubtotal = (TextView) findViewById(R.id.aro_Subtotal);
         xpowerCantidad = (TextView) findViewById(R.id.xpower_Cantidad);
-        //xpowerPrecio = (TextView) findViewById(R.id.xpower_Precio);
-        //xpowerSubtotal = (TextView) findViewById(R.id.xpower_Subtotal);
         sensorCantidad = (TextView) findViewById(R.id.sensor_Cantidad);
-        //sensorPrecio = (TextView) findViewById(R.id.sensor_Precio);
-        //sensorSubtotal = (TextView) findViewById(R.id.sensor_Subtotal);
         total = (TextView) findViewById(R.id.total);
-        //venta = (TextView) findViewById(R.id.);
         excel = (ImageButton) findViewById(R.id.excel);
         txt = (ImageButton) findViewById(R.id.txt);
+        share = (ImageButton) findViewById(R.id.wsp);
         //endregion
 
         // region Send results
@@ -112,6 +90,7 @@ public class ResultActivity extends AppCompatActivity {
         total.setText(String.valueOf(getIntent().getDoubleExtra("TOTAL",0)));
         // endregion
 
+        // Button Excel
         excel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,10 +98,19 @@ public class ResultActivity extends AppCompatActivity {
             }
         });
 
+        // Button Txt
         txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveTxt();
+            }
+        });
+
+        // Button Share
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareTxt();
             }
         });
     }
@@ -205,6 +193,7 @@ public class ResultActivity extends AppCompatActivity {
     }
     // endregion
 
+    // region Button TEXT
     public void saveTxt(){
         String text = "Tipo\t\tCantidad"
                 + "\nPost T\t\t" + String.valueOf(getIntent().getDoubleExtra("POSTT_CANTIDAD",0))
@@ -228,11 +217,10 @@ public class ResultActivity extends AppCompatActivity {
 
         // Write File
         try {
-            //fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
             fos = new FileOutputStream(file);
             fos.write(text.getBytes());
 
-            Toast.makeText(this, "Guardado en " + getFilesDir() + "/" + FILE_NAME, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Guardado como: " + FILE_NAME, Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e){
             e.printStackTrace();
             Toast.makeText(this, "Archivo no Encontrado", Toast.LENGTH_LONG).show();
@@ -250,4 +238,20 @@ public class ResultActivity extends AppCompatActivity {
         }
 
     }
+    // endregion
+
+    // region Button SHARE
+    public void ShareTxt(){
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + FILE_NAME);
+
+        if (file.exists()){
+            shareIntent.setType("*/*");
+            shareIntent.putExtra(Intent.EXTRA_STREAM,Uri.parse("file://" + file.getAbsolutePath()));
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Compartiendo...");
+            //shareIntent.putExtra(Intent.EXTRA_TEXT, "Sharing File 2...");
+            startActivity(Intent.createChooser(shareIntent, "Compartir Archivo"));
+        }
+    }
+    // endregion
 }
