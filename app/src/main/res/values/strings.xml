@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Cotizador de Cerco</string>
+    <!--MainActivity-->
+    <string name="instruccion">Cotizador de Cercos</string>
+    <string name="perimetro">Ingrese Perímetro</string>
+    <string name="segmentos">Ingrese Segmentos</string>
+    <string name="lineas">Ingrese Número de Líneas</string>
+    <string name="distancia_postes">Ingrese Distancia entre Postes</string>
+    <string name="ganancia">Ingrese Margen de Ganacia (%)</string>
+    <string name="calcular">Calcular</string>
+    <!--MainActivity-->
+    <string name="resultados">Resultados</string>
+    <string name="postt">Post T</string>
+</resources>
