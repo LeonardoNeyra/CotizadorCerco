@@ -249,7 +249,6 @@ public class ResultActivity extends AppCompatActivity {
             shareIntent.setType("*/*");
             shareIntent.putExtra(Intent.EXTRA_STREAM,Uri.parse("file://" + file.getAbsolutePath()));
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Compartiendo...");
-            //shareIntent.putExtra(Intent.EXTRA_TEXT, "Sharing File 2...");
             startActivity(Intent.createChooser(shareIntent, "Compartir Archivo"));
         }
     }
