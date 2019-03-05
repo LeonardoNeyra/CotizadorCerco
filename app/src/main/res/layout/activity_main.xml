@@ -38,6 +38,7 @@
         android:fontFamily="@font/lato_bold"
         android:hint="@string/perimetro"
         android:inputType="numberDecimal"
+        android:textColor="@android:color/white"
         android:textColorHint="#ececec" />
 
     <EditText

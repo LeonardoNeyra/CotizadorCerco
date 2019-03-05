@@ -1,38 +1,32 @@
 package com.neyra.leonardo.cotizadorcerco;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Locale;
+
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
 
 public class ResultActivity extends AppCompatActivity {
-    private static final String FILE_NAME = "CotizadorCerco.txt";
+    private static final String FILE_NAME_TXT = "CotizadorCerco.txt";
+    private static final String FILE_NAME_XLS = "CotizadorCerco.xls";
 
     TextView posttCantidad, posttPrecio, posttSubtotal;
     TextView postiCantidad, postiPrecio, postiSubtotal;
@@ -94,7 +88,7 @@ public class ResultActivity extends AppCompatActivity {
         excel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveExcel(this, "/sdcard/myExcel.xls");
+                writeExcel();
             }
         });
 
@@ -116,81 +110,76 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     // region Button EXCEL
-    private boolean saveExcel(View.OnClickListener context, String fileName){
-        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
-            //  Log.w("FileUtils", "Storage not available or read only");
-            return false;
+    public void writeExcel(){
+        //final String fileName = "TodoList.xls";
+
+        //Saving file in external storage
+        File sdCard = Environment.getExternalStorageDirectory();
+        File directory = new File(sdCard.getAbsolutePath() + "/javatechig");
+
+        //create directory if not exist
+        if(!directory.isDirectory()){
+            directory.mkdirs();
         }
 
-        boolean success = false;
+        //file path
+        File file = new File(directory, FILE_NAME_XLS);
 
-        Workbook wb = new HSSFWorkbook();
-
-        Cell c = null;
-
-        //Cell style for header row
-        CellStyle cs = wb.createCellStyle();
-        cs.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIME.getIndex());
-
-        //New Sheet
-        Sheet sheet1 = null;
-        sheet1 = wb.createSheet("myOrder");
-
-        // Generate column headings
-        Row row = sheet1.createRow(0);
-        c = row.createCell(0);
-        c.setCellValue("Item Number");
-        c.setCellStyle(cs);
-
-        c = row.createCell(1);
-        c.setCellValue("Quantity");
-        c.setCellStyle(cs);
-
-        c = row.createCell(2);
-        c.setCellValue("Price");
-        c.setCellStyle(cs);
-
-        sheet1.setColumnWidth(0, (15 * 500));
-        sheet1.setColumnWidth(1, (15 * 500));
-        sheet1.setColumnWidth(2, (15 * 500));
-
-        // Create a path where we will place our List of objects on external storage
-        File file = new File(getExternalFilesDir(null), fileName);
-        FileOutputStream os = null;
+        WorkbookSettings wbSettings = new WorkbookSettings();
+        wbSettings.setLocale(new Locale("en", "EN"));
+        WritableWorkbook workbook;
 
         try {
-            os = new FileOutputStream(file);
-            wb.write(os);
-            success = true;
+            workbook = Workbook.createWorkbook(file, wbSettings);
+            //Excel sheet name. 0 represents first sheet
+            WritableSheet wsheet = workbook.createSheet("Cotizador", 0);
+
+            wsheet.addCell(new Label(0, 0, "Tipo"));
+            wsheet.addCell(new Label(0, 1, "Post T"));
+            wsheet.addCell(new Label(0, 2, "Post I"));
+            wsheet.addCell(new Label(0, 3, "Aisl Temp"));
+            wsheet.addCell(new Label(0, 4, "Aisl Int"));
+            wsheet.addCell(new Label(0, 5, "Abrazadera"));
+            wsheet.addCell(new Label(0, 6, "Alambre Ace."));
+            wsheet.addCell(new Label(0, 7, "Alambre Gal."));
+            wsheet.addCell(new Label(0, 8, "Cable Bujía"));
+            wsheet.addCell(new Label(0, 9, "Letrero"));
+            wsheet.addCell(new Label(0, 10, "Arodoble"));
+            wsheet.addCell(new Label(0, 11, "XPower i8"));
+            wsheet.addCell(new Label(0, 12, "Sensor"));
+            wsheet.addCell(new Label(0, 13, "TOTAL"));
+
+            wsheet.addCell(new Label(1, 0, "Cantidad"));
+            wsheet.addCell(new jxl.write.Number(1, 1, getIntent().getDoubleExtra("POSTT_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 2, getIntent().getDoubleExtra("POSTI_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 3, getIntent().getDoubleExtra("AISLTEMP_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 4, getIntent().getDoubleExtra("AISLINT_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 5, getIntent().getDoubleExtra("ABRAZADERA_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 6, getIntent().getDoubleExtra("ALAMBREACERADO_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 7, getIntent().getDoubleExtra("ALAMBREGALVANIZADO_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 8, getIntent().getDoubleExtra("CABLEBUJIA_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 9, getIntent().getDoubleExtra("LETRERO_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 10, getIntent().getDoubleExtra("ARODOBLE_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 11, getIntent().getDoubleExtra("XPOWERi8_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 12, getIntent().getDoubleExtra("SENSOR_CANTIDAD",0)));
+            wsheet.addCell(new jxl.write.Number(1, 13, getIntent().getDoubleExtra("TOTAL",0)));
+            workbook.write();
+            Toast.makeText(this, "Archivo Guardado", Toast.LENGTH_LONG).show();
+            workbook.close();
+
+
         } catch (IOException e) {
-        } catch (Exception e) {
-            //  Log.w("FileUtils", "Failed to save file", e);
-        } finally {
-            try {
-                if (null != os)
-                    os.close();
-            } catch (Exception ex) {
-            }
+            e.printStackTrace();
+            Toast.makeText(this, "Error en la creación", Toast.LENGTH_LONG).show();
+        } catch (RowsExceededException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Número de filas excedida", Toast.LENGTH_LONG).show();
+        } catch (WriteException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error en la escritura del xlsx", Toast.LENGTH_LONG).show();
         }
-
-        return success;
     }
 
-    public static boolean isExternalStorageAvailable() {
-        String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean isExternalStorageReadOnly() {
-        String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
-            return true;
-        }
-        return false;
-    }
     // endregion
 
     // region Button TEXT
@@ -213,14 +202,14 @@ public class ResultActivity extends AppCompatActivity {
         FileOutputStream fos = null;
 
         // Create File
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), FILE_NAME);
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), FILE_NAME_TXT);
 
         // Write File
         try {
             fos = new FileOutputStream(file);
             fos.write(text.getBytes());
 
-            Toast.makeText(this, "Guardado como: " + FILE_NAME, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Guardado como: " + FILE_NAME_TXT, Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e){
             e.printStackTrace();
             Toast.makeText(this, "Archivo no Encontrado", Toast.LENGTH_LONG).show();
@@ -243,7 +232,7 @@ public class ResultActivity extends AppCompatActivity {
     // region Button SHARE
     public void ShareTxt(){
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + FILE_NAME);
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + FILE_NAME_TXT);
 
         if (file.exists()){
             shareIntent.setType("*/*");
