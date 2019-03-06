@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#479be3"
+    android:background="#ffffff"
     android:orientation="vertical"
     tools:context=".ResultActivity">
 
@@ -30,7 +30,7 @@
                     android:fontFamily="@font/lato_black"
                     android:text="@string/resultados"
                     android:textAlignment="center"
-                    android:textColor="@android:color/white"
+                    android:textColor="#424242"
                     android:textSize="24sp" />
 
                 <ImageView
@@ -815,21 +815,36 @@
                     android:id="@+id/excel"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/rounded_button"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     app:srcCompat="@drawable/dl_excel" />
 
                 <ImageButton
                     android:id="@+id/txt"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/rounded_button"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     app:srcCompat="@drawable/dl_text" />
 
                 <ImageButton
                     android:id="@+id/wsp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/rounded_button"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     app:srcCompat="@drawable/share" />
             </LinearLayout>
 

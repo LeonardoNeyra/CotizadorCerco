@@ -4,109 +4,113 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#479be3"
+    android:background="#ffffff"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView1"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="25dp"
-        android:fontFamily="@font/lato_bold"
-        android:text="@string/instruccion"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="24sp" />
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/perimetro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="7dp"
-        android:drawableStart="@drawable/add_perimeter_white"
-        android:drawablePadding="15dp"
-        android:ems="10"
-        android:fontFamily="@font/lato_bold"
-        android:hint="@string/perimetro"
-        android:inputType="numberDecimal"
-        android:textColor="@android:color/white"
-        android:textColorHint="#ececec" />
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/instruccion"
+                android:textAlignment="center"
+                android:textColor="#424242"
+                android:textSize="24sp" />
 
-    <EditText
-        android:id="@+id/segmentos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="7dp"
-        android:drawableStart="@drawable/add_segment2_white"
-        android:drawablePadding="15dp"
-        android:ems="10"
-        android:fontFamily="@font/lato_bold"
-        android:hint="@string/segmentos"
-        android:inputType="numberDecimal"
-        android:textColor="@android:color/white"
-        android:textColorHint="#ececec" />
+            <EditText
+                android:id="@+id/perimetro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:drawableStart="@drawable/add_perimeter"
+                android:drawablePadding="15dp"
+                android:ems="10"
+                android:fontFamily="@font/lato_bold"
+                android:hint="@string/perimetro"
+                android:inputType="numberDecimal"
+                android:textColor="#212121"
+                android:textColorHint="#616161" />
 
-    <EditText
-        android:id="@+id/lineas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="7dp"
-        android:drawableStart="@drawable/add_line2_white"
-        android:drawablePadding="15dp"
-        android:ems="10"
-        android:fontFamily="@font/lato_bold"
-        android:hint="@string/lineas"
-        android:inputType="numberDecimal"
-        android:textColor="@android:color/white"
-        android:textColorHint="#ececec" />
+            <EditText
+                android:id="@+id/segmentos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:drawableStart="@drawable/add_segment2"
+                android:drawablePadding="15dp"
+                android:ems="10"
+                android:fontFamily="@font/lato_bold"
+                android:hint="@string/segmentos"
+                android:inputType="numberDecimal"
+                android:textColor="#212121"
+                android:textColorHint="#616161" />
 
-    <EditText
-        android:id="@+id/distanciaPostes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="7dp"
-        android:drawableStart="@drawable/add_distance_white"
-        android:drawablePadding="15dp"
-        android:ems="10"
-        android:fontFamily="@font/lato_bold"
-        android:hint="@string/distancia_postes"
-        android:inputType="numberDecimal"
-        android:textColor="@android:color/white"
-        android:textColorHint="#ececec" />
+            <EditText
+                android:id="@+id/lineas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:drawableStart="@drawable/add_line2"
+                android:drawablePadding="15dp"
+                android:ems="10"
+                android:fontFamily="@font/lato_bold"
+                android:hint="@string/lineas"
+                android:inputType="numberDecimal"
+                android:textColor="#212121"
+                android:textColorHint="#616161" />
 
-    <EditText
-        android:id="@+id/ganancia"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="7dp"
-        android:drawableStart="@drawable/add_profit2_white"
-        android:drawablePadding="15dp"
-        android:ems="10"
-        android:fontFamily="@font/lato_bold"
-        android:hint="@string/ganancia"
-        android:inputType="numberDecimal"
-        android:textColor="@android:color/white"
-        android:textColorHint="#ececec" />
+            <EditText
+                android:id="@+id/distanciaPostes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:drawableStart="@drawable/add_distance"
+                android:drawablePadding="15dp"
+                android:ems="10"
+                android:fontFamily="@font/lato_bold"
+                android:hint="@string/distancia_postes"
+                android:inputType="numberDecimal"
+                android:textColor="#212121"
+                android:textColorHint="#616161" />
 
-    <Button
-        android:id="@+id/btnCalcular"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="5dp"
-        android:background="#84c3ee"
-        android:fontFamily="@font/lato_black"
-        android:text="@string/calcular"
-        android:textColor="@android:color/white" />
+            <EditText
+                android:id="@+id/ganancia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:drawableStart="@drawable/add_profit2"
+                android:drawablePadding="15dp"
+                android:ems="10"
+                android:fontFamily="@font/lato_bold"
+                android:hint="@string/ganancia"
+                android:inputType="numberDecimal"
+                android:textColor="#212121"
+                android:textColorHint="#616161" />
 
+            <Button
+                android:id="@+id/btnCalcular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/rounded_button"
+                android:fontFamily="@font/lato_black"
+                android:text="@string/calcular"
+                android:textColor="#ffffff" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
